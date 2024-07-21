@@ -2,7 +2,7 @@
 
 This repository contains the code for a Eurorack MIDI to CV module. The module is built using the Seeed RP2040 microcontroller and an MCP4725 DAC, which communicates via I2C. The code is written in CircuitPython.
 
-https://github.com/user-attachments/assets/76742825-4f12-4d8c-a3f1-ee67ed8530b7
+https://github.com/user-attachments/assets/7e9563ef-42bf-4675-8436-50124fb8f742
 
 ## Features
 
