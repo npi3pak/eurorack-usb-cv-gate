@@ -1,4 +1,3 @@
-import time
 import board
 import digitalio
 import busio
@@ -11,7 +10,7 @@ from adafruit_midi.note_off import NoteOff
 from adafruit_midi.note_on import NoteOn
 from volts import volts
 from logger import Logger
-
+import time
 
 logger = Logger(Logger.DEBUG)
 
@@ -24,9 +23,11 @@ midi = adafruit_midi.MIDI(
     midi_in=usb_midi.ports[0], in_channel=0, midi_out=usb_midi.ports[1], out_channel=0
 )
 
+
 # Gate output pin
 gate = DigitalInOut(board.A1)
 gate.direction = Direction.OUTPUT
+
 
 # I2C setup
 i2c = busio.I2C(board.GP7, board.GP6)
@@ -62,9 +63,10 @@ def midi_to_cv():
             print(active_notes)
             # dac.raw_value = 0
             logger.info(f"Note Off: {msg.note}, DAC set to 0, gate off")
-
+            
             if msg.note in active_notes:
                 if len(active_notes) > 1:
+                    
                     active_notes.remove(msg.note)
                     active_notes.sort()
 
@@ -72,12 +74,15 @@ def midi_to_cv():
                     dac.raw_value = int(pitches[z])
                     # return None
             if len(active_notes) == 1 and msg.note in active_notes:
-                active_notes.clear()
                 gate.value = False
+                active_notes.clear()
+                # z = midi_notes.index(active_notes[-1])
+                # dac.raw_value = int(pitches[z])
 
             return None
 
         if isinstance(msg, NoteOn):
+            print(2)
             logger.info(f"Note On: {msg.note}, Velocity: {msg.velocity}")
 
             # Compare incoming note number to midi_notes[]
@@ -127,3 +132,4 @@ print(gate.value)
 while True:
     led.value = False
     midi_to_cv()
+    time.sleep(0.001)
